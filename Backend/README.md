@@ -77,3 +77,86 @@ The request body should be a JSON object with the following fields:
     "error": "Internal Server Error"
   }
   ```
+
+# User Login Endpoint
+
+## POST /user/login
+
+### Description
+This endpoint is used to log in an existing user. It requires the user's email and password.
+
+### Request Body
+The request body should be a JSON object with the following fields:
+- `email` (string, required): The user's email address (must be a valid email).
+- `password` (string, required): The user's password (minimum 5 characters).
+
+### Example Request
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+
+### Responses
+
+#### Success
+- **Status Code**: 200 OK
+- **Response Body**:
+  ```json
+  {
+    "token": "jwt-token",
+    "user": {
+      "_id": "user-id",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
+
+#### Validation Errors
+- **Status Code**: 400 Bad Request
+- **Response Body**:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid Email",
+        "param": "email",
+        "location": "body"
+      },
+      {
+        "msg": "Password must be atleast 5 characters long",
+        "param": "password",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+#### Authentication Errors
+- **Status Code**: 401 Unauthorized
+- **Response Body**:
+  ```json
+  {
+    "message": "User not found"
+  }
+  ```
+  or
+  ```json
+  {
+    "message": "Invalid password"
+  }
+  ```
+
+#### Server Errors
+- **Status Code**: 500 Internal Server Error
+- **Response Body**:
+  ```json
+  {
+    "error": "Internal Server Error"
+  }
+  ```
